@@ -115,8 +115,8 @@ func (c *Column) getStyle() lipgloss.Style {
 
 // MoveMsg can be handled by the lib user to update the status of their items.
 type MoveMsg struct {
-	i    int
-	item list.Item
+	I    int
+	Item list.Item
 }
 
 // MoveToNext returns the new column index for the selected item.

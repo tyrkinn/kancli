@@ -79,7 +79,7 @@ func (m *Board) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.loaded = true
 		return m, tea.Batch(cmds...)
 	case MoveMsg:
-		cmds = append(cmds, m.Cols[msg.i].Set(APPEND, msg.item))
+		cmds = append(cmds, m.Cols[msg.I].Set(APPEND, msg.Item))
 		m.onMoveItem(msg)
 	case tea.KeyMsg:
 		switch {
