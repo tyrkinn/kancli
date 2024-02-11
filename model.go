@@ -7,12 +7,15 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+type MoveItemPredicate func(MoveMsg)
+
 type Board struct {
-	help     help.Model
-	loaded   bool
-	Focused  focus
-	Cols     []Column
-	quitting bool
+	help       help.Model
+	loaded     bool
+	Focused    focus
+	Cols       []Column
+	quitting   bool
+	onMoveItem MoveItemPredicate
 }
 
 type focus int
@@ -39,10 +42,10 @@ const (
 
 // NewDefaultBoard creates a new kanban board with To Do, In Progress, and Done
 // columns.
-func NewDefaultBoard(cols []Column) *Board {
+func NewDefaultBoard(cols []Column, onMoveItem MoveItemPredicate) *Board {
 	help := help.New()
 	help.ShowAll = true
-	b := &Board{Cols: cols, help: help}
+	b := &Board{Cols: cols, help: help, onMoveItem: onMoveItem}
 	for i, c := range cols {
 		if c.Focused() {
 			b.Focused = focus(i)
@@ -77,6 +80,7 @@ func (m *Board) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Batch(cmds...)
 	case MoveMsg:
 		cmds = append(cmds, m.Cols[msg.i].Set(APPEND, msg.item))
+		m.onMoveItem(msg)
 	case tea.KeyMsg:
 		switch {
 		case key.Matches(msg, keys.Quit):
