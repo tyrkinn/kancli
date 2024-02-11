@@ -1,4 +1,4 @@
-module github.com/charmbracelet/kancli
+module github.com/tyrkinn/kancli
 
 go 1.19
 
